@@ -41,29 +41,27 @@ export const transpile = async (config) => {
     )
   })
 
-  const writingFiles = Promise.all(transpilingHTMLFiles).then((viewWriters) => {
-    return Promise.all([
-      ViewWriter.writeAll(
-        viewWriters, config.output.src.views, config.output.src.controllers
-      ).then((paths) => outputFiles.push(...paths)),
-      scriptWriter.write(
+  const writingFiles = await Promise.all(transpilingHTMLFiles).then(async (viewWriters) => {
+    const viewPaths = await ViewWriter.writeAll(
+      viewWriters, config.output.src.views, config.output.src.controllers
+    );
+    outputFiles.push(...viewPaths);
+
+    const scriptPaths = await scriptWriter.write(
         config.output.src.scripts
-      ).then((paths) => outputFiles.push(...paths)),
-      styleWriter.write(
+    )
+    outputFiles.push(...scriptPaths);
+
+    const stylePaths = await styleWriter.write(
         config.output.src.styles
-      ).then((paths) => outputFiles.push(...paths)),
-    ])
+    )
+    outputFiles.push(...stylePaths),
   })
 
-  const makingPublicDir = makePublicDir(
+  await makePublicDir(
     config,
     publicSubDirs,
   ).then((paths) => outputFiles.push(...paths))
-
-  await Promise.all([
-    writingFiles,
-    makingPublicDir,
-  ])
 
   return git.add(outputFiles).then((files) => {
     return git.commit(files, 'Migrate')

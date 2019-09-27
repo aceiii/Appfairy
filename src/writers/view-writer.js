@@ -42,23 +42,20 @@ class ViewWriter extends Writer {
     ctrlsDir = path.relative(dir, ctrlsDir)
     viewWriters = flattenChildren(viewWriters)
 
-    const writingViews = viewWriters.map(async (viewWriter) => {
-      const filePaths = await viewWriter.write(dir, ctrlsDir)
-      childFilePaths.push(...filePaths)
-    })
+    for (let i = 0; i < viewWriters.length; i += 1) {
+      const filePaths = await viewWriter.write(dir, ctrlsDir);
+      childFilePaths.push(...filePaths);
+    }
 
+    const viewWriteClassNames = {};
     const index = viewWriters.map((viewWriter) => {
+      if (viewWriteClassNames[viewWriter.className]) return;
+      viewWriteClassNames[viewWriteClassNames] = true;
       return `export { default as ${viewWriter.className} } from './${viewWriter.className}'`
-    }).join('\n')
+    }).filter(i => i).join('\n')
 
-    const writingIndex = fs.writeFile(indexFilePath, freeLint(index))
-    const writingHelpers = fs.writeFile(helpersFilePath, raw.viewHelpers)
-
-    await Promise.all([
-      ...writingViews,
-      writingIndex,
-      writingHelpers,
-    ])
+    await fs.writeFile(indexFilePath, freeLint(index))
+    await fs.writeFile(helpersFilePath, raw.viewHelpers)
 
     return childFilePaths
   }
@@ -287,17 +284,12 @@ class ViewWriter extends Writer {
     const filePath = `${dir}/${this.className}.js`
     const childFilePaths = [filePath]
 
-    const writingChildren = this[_].children.map(async (child) => {
-      const filePaths = await child.write(dir, ctrlsDir)
-      childFilePaths.push(...filePaths)
-    })
+    for (let i = 0; i < this[_].children.length; i += 1) {
+      const filePaths = await child.write(dir, ctrlsDir);
+      childFilePaths.push(...filePaths);
+    }
 
-    const writingSelf = fs.writeFile(`${dir}/${this.className}.js`, this[_].compose(ctrlsDir))
-
-    await Promise.all([
-      ...writingChildren,
-      writingSelf,
-    ])
+    await fs.writeFile(`${dir}/${this.className}.js`, this[_].compose(ctrlsDir))
 
     return childFilePaths
   }
