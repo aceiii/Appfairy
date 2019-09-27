@@ -173,6 +173,8 @@ class ViewWriter extends Writer {
         styles: this.styles,
       });
 
+      global._viewWriters[elName] = child;
+
       children.push(child)
       el = $('[af-el]')[0]
     }
