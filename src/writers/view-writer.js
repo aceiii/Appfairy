@@ -43,6 +43,7 @@ class ViewWriter extends Writer {
     viewWriters = flattenChildren(viewWriters)
 
     for (let i = 0; i < viewWriters.length; i += 1) {
+      const viewWriter = viewWriters[i];
       const filePaths = await viewWriter.write(dir, ctrlsDir);
       childFilePaths.push(...filePaths);
     }
@@ -285,6 +286,7 @@ class ViewWriter extends Writer {
     const childFilePaths = [filePath]
 
     for (let i = 0; i < this[_].children.length; i += 1) {
+      const child = this[_].children[i];
       const filePaths = await child.write(dir, ctrlsDir);
       childFilePaths.push(...filePaths);
     }

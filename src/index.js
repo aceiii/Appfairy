@@ -41,7 +41,7 @@ export const transpile = async (config) => {
     )
   })
 
-  const writingFiles = await Promise.all(transpilingHTMLFiles).then(async (viewWriters) => {
+  await Promise.all(transpilingHTMLFiles).then(async (viewWriters) => {
     const viewPaths = await ViewWriter.writeAll(
       viewWriters, config.output.src.views, config.output.src.controllers
     );
@@ -49,14 +49,14 @@ export const transpile = async (config) => {
 
     const scriptPaths = await scriptWriter.write(
         config.output.src.scripts
-    )
+    );
     outputFiles.push(...scriptPaths);
 
     const stylePaths = await styleWriter.write(
         config.output.src.styles
-    )
-    outputFiles.push(...stylePaths),
-  })
+    );
+    outputFiles.push(...stylePaths);
+  });
 
   await makePublicDir(
     config,
