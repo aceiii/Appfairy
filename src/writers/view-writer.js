@@ -153,6 +153,8 @@ class ViewWriter extends Writer {
 
     let el = $('[af-el]')[0]
 
+    global._viewWriters = global._viewWriters || [];
+
     while (el) {
       const $el = $(el)
       const elName = $el.attr('af-el')
@@ -164,12 +166,12 @@ class ViewWriter extends Writer {
       $afEl.insertAfter($el)
       $el.remove()
 
-      const child = new ViewWriter({
+      const child = global._viewWriters[elName] || new ViewWriter({
         name: elName,
         html: $.html($el),
         baseUrl: this.baseUrl,
         styles: this.styles,
-      })
+      });
 
       children.push(child)
       el = $('[af-el]')[0]
