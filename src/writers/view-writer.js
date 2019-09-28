@@ -50,11 +50,11 @@ class ViewWriter extends Writer {
     }
 
     const viewWriteClassNames = {};
-    const index = viewWriters.map((viewWriter) => {
+    const index = Array.from(new Set(viewWriters.map((viewWriter) => {
       if (viewWriteClassNames[viewWriter.className]) return;
       viewWriteClassNames[viewWriter.className] = true;
       return `export { default as ${viewWriter.className} } from './${viewWriter.className}'`
-    }).filter(i => i).sort().join('\n')
+    }))).sort().join('\n')
 
     await fs.writeFile(indexFilePath, freeLint(index))
     await fs.writeFile(helpersFilePath, raw.viewHelpers)
