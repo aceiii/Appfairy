@@ -211,6 +211,24 @@ class ViewWriter extends Writer {
       $script.remove()
     })
 
+    // Apply absolutizeUrl to img src and srcset attributes
+    $('img').each((i, img) => {
+      const $img = $(img);
+      const src = absolutizeUrl($img.attr('src'));
+
+      $img.attr('src', src);
+
+      if ($img.attr('srcset')) {
+        const srcSet = $img.attr('srcset')
+          .split(',')
+          .map(src => absolutizeUrl(src.trim()))
+          .filter(src => src)
+          .join(', ')
+
+        $img.attr('srcset', srcSet);
+      }
+    })
+
     // Wrapping with .af-view will apply encapsulated CSS
     const $body = $('body')
     const $afContainer = $('<span class="af-view"></span>')
