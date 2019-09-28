@@ -421,6 +421,11 @@ class ViewWriter extends Writer {
   _composeScriptsDeclerations() {
     return this[_].scripts.map((script) => {
       if (script.type == 'src') {
+
+        if (!script.body.match(/^\/|^.+:\/\//)) {
+          script.body = `/${script.body}`;
+        }
+
         return `fetch("${script.body}").then(body => body.text()),`
       }
 
