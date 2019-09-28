@@ -417,9 +417,9 @@ class ViewWriter extends Writer {
   }
 
   _composeChildImports() {
-    const imports = this[_].children.map((child) => {
+    const imports = Array.from(new Set(this[_].children.map((child) => {
       return `import ${child.className} from './${child.className}'`
-    })
+    }))).sort();
 
     // Line skip
     imports.push('')
