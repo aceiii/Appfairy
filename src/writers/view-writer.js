@@ -153,7 +153,7 @@ class ViewWriter extends Writer {
 
     let el = $('[af-el]')[0]
 
-    global._viewWriters = global._viewWriters || [];
+    global._viewWriters = global._viewWriters || {};
 
     while (el) {
       const $el = $(el)
@@ -174,7 +174,6 @@ class ViewWriter extends Writer {
       });
 
       global._viewWriters[elName] = child;
-
       children.push(child)
       el = $('[af-el]')[0]
     }
