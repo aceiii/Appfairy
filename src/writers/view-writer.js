@@ -115,15 +115,6 @@ class ViewWriter extends Writer {
     const children = this[_].children = []
     const $ = cheerio.load(html)
 
-    // Encapsulate styles
-    $('style').each((i, el) => {
-      const $el = $(el)
-      const html = $el.html()
-      const css = encapsulateCSS(html, this.srouce)
-
-      $el.html(css)
-    })
-
     $('*').each((i, el) => {
       const $el = $(el)
       let className = $el.attr('class')
@@ -209,6 +200,15 @@ class ViewWriter extends Writer {
       }
 
       $script.remove()
+    })
+
+    // Encapsulate styles
+    $('style').each((i, el) => {
+      const $el = $(el)
+      const html = $el.html()
+      const css = encapsulateCSS(html, this.srouce)
+
+      $el.html(css)
     })
 
     // Apply absolutizeUrl to img src and srcset attributes
