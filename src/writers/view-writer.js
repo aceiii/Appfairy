@@ -345,9 +345,6 @@ class ViewWriter extends Writer {
       import React from 'react'
       import { createScope, map, transformProxies } from './helpers'
       ==>${this[_].composeChildImports()}<==
-      const scripts = [
-        ==>${this[_].composeScriptsDeclerations()}<==
-      ]
 
       let Controller
 
@@ -370,10 +367,6 @@ class ViewWriter extends Writer {
 
             throw e
           }
-        }
-
-        componentDidMount() {
-          ==>${this[_].composeScriptsInvocations()}<==
         }
 
         render() {
