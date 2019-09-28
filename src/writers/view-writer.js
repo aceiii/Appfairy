@@ -16,6 +16,7 @@ import {
   Internal,
   splitWords,
   upperFirst,
+  absolutizeUrl,
 } from '../utils'
 
 const _ = Symbol('_ViewWriter')
@@ -188,7 +189,7 @@ class ViewWriter extends Writer {
     // Set inline scripts. Will be loaded once component has been mounted
     $('script').each((i, script) => {
       const $script = $(script)
-      const src = $script.attr('src')
+      const src = absolutizeUrl($script.attr('src'))
       const type = $script.attr('type')
 
       // We're only interested in JavaScript script tags
@@ -421,12 +422,7 @@ class ViewWriter extends Writer {
   _composeScriptsDeclerations() {
     return this[_].scripts.map((script) => {
       if (script.type == 'src') {
-
-        if (!script.body.match(/^\/|^.+:\/\//)) {
-          script.body = `/${script.body}`;
-        }
-
-        return `fetch("${script.body}").then(body => body.text()),`
+        return `fetch("${absolutizeUrl(script.body)}").then(body => body.text()),`
       }
 
       const minified = uglify.minify(script.body).code

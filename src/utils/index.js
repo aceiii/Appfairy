@@ -146,3 +146,16 @@ export const padLeft = (str, length, char = ' ') => {
 
   return Array(length).join(char) + str
 }
+
+// js/file.js -> /js/file.js
+export const absolutizeUrl = (url) => {
+  if (typeof url !== 'string') {
+    return url;
+  }
+
+  if (!url.match(/^\/|^.*:\/\//)) {
+    return `/${url}`;
+  }
+
+  return url;
+}
