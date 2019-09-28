@@ -382,12 +382,9 @@ class ViewWriter extends Writer {
           }
 
           return (
-            <span>
-              <style dangerouslySetInnerHTML={{ __html: \`
-                ==>${this[_].composeStyleImports()}<==
-              \` }} />
+            <React.Fragment>
               ==>${this.jsx}<==
-            </span>
+            </React.Fragment>
           )
         }
       }
