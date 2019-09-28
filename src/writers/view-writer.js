@@ -411,9 +411,9 @@ class ViewWriter extends Writer {
   }
 
   _composeProxiesDefault() {
-    return this[_].sockets.map((socket) => {
+    return Array.from(new Set(this[_].sockets.map((socket) => {
       return `'${socket}': [],`
-    }).join('\n')
+    }))).sort().join('\n')
   }
 
   _composeChildImports() {
